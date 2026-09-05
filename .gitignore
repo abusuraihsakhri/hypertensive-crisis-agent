@@ -1,10 +1,32 @@
+# Python cache
 __pycache__/
 *.pyc
 *.pyo
+*.egg-info/
+dist/
+build/
+
+# Testing
 .pytest_cache/
+.coverage
+htmlcov/
+
+# Output files
 results.csv
 output.csv
 *.log
-dist/
-build/
-*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

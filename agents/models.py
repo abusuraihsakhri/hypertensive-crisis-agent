@@ -6,7 +6,7 @@ Standard: AHA/ACC Guidelines / Surviving Sepsis Campaign
 import datetime
 from enum import Enum
 from typing import Dict, Any, List, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class UrgencyLevel(str, Enum):
@@ -22,14 +22,21 @@ class SystemIntegrityStatus(str, Enum):
 
 
 class SystemTaskPayload(BaseModel):
-    task_id: str = Field(..., description="Unique task / case identifier")
-    target_identifier: str = Field(..., description="Entity, patient key, or genomic/cryptographic target")
-    primary_metric: float = Field(..., description="Primary domain measurement or score")
-    secondary_metric: float = Field(default=0.0, description="Secondary kinetic or confidence score")
-    status_descriptor: str = Field(default="NOMINAL", description="Status code or phenotype descriptor")
+    task_id: str = Field(..., min_length=1, max_length=128, description="Unique task / case identifier")
+    target_identifier: str = Field(..., min_length=1, max_length=256, description="Entity, patient key, or genomic/cryptographic target")
+    primary_metric: float = Field(..., ge=0.0, le=1000.0, description="Primary domain measurement or score")
+    secondary_metric: float = Field(default=0.0, ge=0.0, le=1000.0, description="Secondary kinetic or confidence score")
+    status_descriptor: str = Field(default="NOMINAL", max_length=128, description="Status code or phenotype descriptor")
     is_critical_flag: bool = Field(default=False, description="Emergency escalation or high priority trigger")
     attributes: Dict[str, Any] = Field(default_factory=dict, description="Metadata key-value pairs")
     timestamp: str = Field(default_factory=lambda: datetime.datetime.now(datetime.timezone.utc).isoformat())
+
+    @field_validator("task_id", "target_identifier", "status_descriptor")
+    @classmethod
+    def sanitize_text_fields(cls, v: str) -> str:
+        """Strip control characters from text inputs to prevent injection."""
+        sanitized = "".join(ch for ch in v if ch.isprintable())
+        return sanitized.strip()
 
 
 class AgentAlert(BaseModel):
