@@ -1,7 +1,7 @@
 """
 Clinical Data Models & Enums for HypertensiveCrisis Sentinel: Emergency vs Urgency End-Organ Damage Arbiter.
 Domain: Emergency Medicine
-Standard: ACC / AHA Hypertensive Crisis Guidelines
+Standard: Experimental generic-metric example (not a hypertension guideline)
 """
 import datetime
 from dataclasses import dataclass, field
@@ -43,7 +43,7 @@ class AgentAlert:
     title: str
     clinical_finding: str
     actionable_recommendation: str
-    guideline_citation: str = "ACC / AHA Hypertensive Crisis Guidelines"
+    guideline_citation: str = "Experimental generic-metric example (not a hypertension guideline)"
     timestamp: str = field(default_factory=lambda: datetime.datetime.now(datetime.timezone.utc).isoformat())
 
     def to_dict(self) -> Dict[str, Any]:
