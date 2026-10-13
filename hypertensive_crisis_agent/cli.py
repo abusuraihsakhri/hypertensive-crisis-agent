@@ -51,7 +51,7 @@ def main(argv=None):
         dossier = coordinator.process_case(case)
         print("=" * 80)
         print(f"  HYPERTENSIVECRISIS SENTINEL: EMERGENCY VS URGENCY END-ORGAN DAMAGE ARBITER")
-        print(f"  Domain: Emergency Medicine | Standard: ACC / AHA Hypertensive Crisis Guidelines")
+        print(f"  Domain: Emergency Medicine | Example thresholds only — not clinically validated")
         print(f"  Case: {dossier['case_id']} | Status: [{dossier['overall_status']}] | Total Alerts: {dossier['total_alerts']}")
         print("=" * 80)
         for a in dossier["alerts"]:
