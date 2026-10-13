@@ -14,8 +14,8 @@ def create_app():
 
         app = FastAPI(
             title="HypertensiveCrisis Sentinel: Emergency vs Urgency End-Organ Damage Arbiter",
-            description="Evaluates severe hypertension (SBP >180 / DBP >120) with acute end-organ damage (aortic dissection, ACS, PRES, AKI, microangiopathic hemolysis).",
-            version="2.0.0-PRO",
+            description="Experimental generic-metric audit API; not a hypertensive emergency diagnosis.",
+            version="2.0.1",
         )
 
         class AuditRequest(BaseModel):
@@ -33,7 +33,7 @@ def create_app():
 
         @app.get("/health")
         def health():
-            return {"status": "HEALTHY", "system": "hypertensive-crisis-agent", "domain": "Emergency Medicine", "version": "2.0.0-PRO"}
+            return {"status": "HEALTHY", "system": "hypertensive-crisis-agent", "domain": "Emergency Medicine", "version": "2.0.1"}
 
         @app.post("/api/audit")
         def api_audit(req: AuditRequest):
