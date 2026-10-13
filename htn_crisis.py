@@ -89,7 +89,15 @@ class MAPReductionTargetAgent:
     """Specialized Sub-Agent 2 for hypertensive-crisis-agent"""
     def evaluate(self, payload: Dict[str, Any]) -> List[AgentAlert]:
         alerts = []
-        is_critical = bool(payload.get("critical_flag", False))
+        flag = payload.get("critical_flag", False)
+        if isinstance(flag, bool):
+            is_critical = flag
+        elif str(flag).strip().lower() in ("1", "true", "yes"):
+            is_critical = True
+        elif str(flag).strip().lower() in ("0", "false", "no", ""):
+            is_critical = False
+        else:
+            raise ValueError("critical_flag must be a boolean value")
         val2 = float(payload.get("metric_secondary", 5.0))
         if is_critical or val2 > 12.0:
             alerts.append(
