@@ -166,7 +166,7 @@ class HTNCrisisCoordinator:
         if "summary" in q or "status" in q:
             return f"HypertensiveCrisis Sentinel: Emergency vs Urgency End-Organ Damage Arbiter currently tracking {len(self.case_registry)} cases in local air-gapped memory."
         elif "guidelines" in q or "protocol" in q:
-            return "These agents use experimental generic thresholds; no clinical guideline validation has been performed."
+            return "These agents use experimental generic thresholds; they are not validated against clinical guidelines or standards."
         else:
             return f"HypertensiveCrisis Sentinel: Emergency vs Urgency End-Organ Damage Arbiter executive agent online. Continuous supervisory monitoring active across all domain parameters."
 
