@@ -1,138 +1,59 @@
 # Hypertensive Crisis Agent
 
-> **Domain:** Cardiovascular Medicine & Hemodynamic Analytics  
-> **Reference Guidelines & Standards:** `AHA/ACC Practice Guidelines & ESC Clinical Standards`
+An **educational** browser blood-pressure screen and preserved experimental Python audit workflows. **Not a clinically validated decision-support or treatment device.**
 
-<div align="center">
+## Browser application
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-3776AB.svg?logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688.svg?logo=fastapi&logoColor=white)
-![Audit Trail](https://img.shields.io/badge/Audit-HMAC--SHA256_Tamper--Evident-brightgreen.svg)
-![Zero-PHI Guard](https://img.shields.io/badge/Guard-Zero--PHI_Outbound-blue.svg)
-![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg?logo=docker&logoColor=white)
+Open `web/index.html` directly in a modern browser. Enter systolic/diastolic blood pressure, indicate possible acute symptoms or organ injury, and identify pregnancy/postpartum context. The page runs locally without Python, network requests, analytics, or input storage. Do not enter identifiable patient information.
 
-</div>
+The screening rule uses the 2025 AHA/ACC severe BP threshold (**SBP >180 or DBP >120 mm Hg**) and explains that suspected acute target-organ damage requires emergency evaluation. It does not diagnose organ injury, prescribe drugs, or set condition-specific treatment targets. Unknown findings remain indeterminate. Pregnancy/postpartum and other condition-specific emergencies require separate clinical pathways. Emergency symptoms require emergency care regardless of the screening result.
 
----
+Clinical references:
+- [2025 AHA/ACC high blood pressure guideline, §6.2](https://www.jacc.org/doi/10.1016/j.jacc.2025.05.007)
+- [2024 AHA acute-care BP statement](https://professional.heart.org/en/science-news/management-of-elevated-blood-pressure-in-the-acute-care-setting)
+- [2024 ESC hypertension guideline](https://academic.oup.com/eurheartj/article/45/38/3912/7741010)
 
-## 📖 What It Does
+## Legacy Python interfaces
 
-**Hypertensive Crisis Agent** is an advanced analytical and computational platform implementing Emergency vs Urgency End-Organ Damage & MAP Reduction Titrator.
+The existing interfaces remain for backward compatibility, but their generic primary/secondary metric thresholds are **not** validated clinical hypertensive-crisis algorithms:
 
----
+- `python cli.py` — generic supervisor, batch CSV, HMAC audit chain and FastAPI application (`agents/`)
+- `python htn_crisis.py` — legacy standalone generic-metric evaluator
+- `python -m hypertensive_crisis_agent.cli` — separate package implementation
 
-## ⚙️ Key Capabilities & Algorithmic Modules
+No external LLM provider is implemented. The deterministic mock is for testing only.
 
-### 🔬 Core Algorithmic & Evaluation Engines
+### Install, test, and use
 
-- **`Severity`** — dedicated module for severity evaluation and state verification.
-- **`DomainKnowledgeRegistry`**: Enterprise domain rules, guideline matrices, and evidence benchmarks.
-- **`AgentAlert`** — dedicated module for agent alert evaluation and state verification.
-- **`EndOrganDamageScannerAgent`**: Specialized Sub-Agent 1 for hypertensive-crisis-agent
-- **`MAPReductionTargetAgent`**: Specialized Sub-Agent 2 for hypertensive-crisis-agent
-- **`IVAntihypertensiveAdvisorAgent`**: Specialized Sub-Agent 3 for hypertensive-crisis-agent
+Python 3.10+ is supported. Node.js 22 is used only to test the browser logic.
 
----
-
-## 💻 CLI Quickstart & Usage
-
-### 1. Run a Single Audit
 ```bash
-python cli.py audit --task-id TASK-001 --target TARGET-01 --primary 28.5 --secondary 14.2 --critical --status DISCORDANT
-```
-
-### 2. Query the Supervisory Chat
-```bash
-python cli.py chat "What is the system status?"
-```
-
-### 3. Batch Process CSV Records
-```bash
+python -m pip install -e ".[api,test]"
+python -m pytest -q
+node --test web/app.test.cjs
+python cli.py audit --task-id DEMO-001 --target SYNTH-001 --primary 28.5 --secondary 14.2
 python cli.py batch -i sample.csv -o results.csv
-```
-
-### 4. Verify Audit Trail Integrity
-```bash
 python cli.py verify-audit
-```
-
-### 5. Launch REST API Server
-```bash
 python cli.py serve --host 127.0.0.1 --port 8000
 ```
 
-### Parameter Reference
-| Argument | Description | Default |
-|:---------|:------------|:--------|
-| `--task-id` | Unique task/case identifier | `TASK-2026-001` |
-| `--target` | Target entity or specimen identifier | `KEY-TARGET-01` |
-| `--primary` | Primary metric measurement (0-1000) | `28.5` |
-| `--secondary` | Secondary metric measurement (0-1000) | `14.2` |
-| `--critical` | Flag as critical/STAT emergency | `False` |
-| `--status` | Status descriptor (e.g., NOMINAL, DISCORDANT) | `DISCORDANT` |
+The experimental FastAPI server exposes `/health`, `/api/audit`, `/api/chat`, `/metrics` and `/api/audit/logs`. It does **not** power the browser page.
 
-### Input Data Schema (Batch CSV)
-
-| Field | Description | Requirement |
-|:------|:------------|:------------|
-| `task_id` | Unique task identifier | Required |
-| `target_identifier` | Target entity identifier | Required |
-| `primary_metric` | Primary measurement value (0-1000) | Required |
-| `secondary_metric` | Secondary measurement value (0-1000) | Optional |
-| `is_critical_flag` | Critical escalation flag (true/false) | Optional |
-| `status_descriptor` | Status code (NOMINAL, DISCORDANT, etc.) | Optional |
-
----
-
-## 🛡️ Security & Enterprise Architecture
-
-* **Zero-PHI Outbound Interceptor:** Active regex inspection blocking SSNs, MRNs, phone numbers, emails, and patient identifiers from outbound data.
-* **Tamper-Evident HMAC-SHA256 Audit Trail:** Chained, cryptographically signed logs with integrity verification for every evaluation and state transition.
-* **Input Validation:** Pydantic models with bounds checking (metrics 0-1000), string length limits, and control character sanitization.
-* **Air-Gapped LLM Reasoning Adapter:** Agnostic integration for local Ollama instances (`llama3`, `mistral`), Claude 3.5 Sonnet, GPT-4o, and deterministic test mocks.
-* **Active Learning Bayesian Calibration:** Dynamic tracker updating worker reliability weights and monitoring Brier calibration drift.
-* **FastAPI & Prometheus Telemetry:** Exposes OpenAPI 3.1 REST endpoints and operational Prometheus metrics (`/metrics`).
-
-### Environment Variables
-| Variable | Description | Default |
-|:---------|:------------|:--------|
-| `AUDIT_SECRET_KEY` | Secret key for HMAC-SHA256 audit trail signing | Ephemeral (random per session) |
-| `MODEL_PROVIDER` | LLM provider (`mock`, `ollama`, `claude`, `openai`) | `mock` |
-
----
-
-## 🧪 Testing & Verification
-
-Install dev dependencies:
-
-```bash
-pip install pytest httpx
-```
-
-Run the automated test suite:
-
-```bash
-pytest -v
-```
-
-Test categories:
-- **Unit tests** (`test_htn_crisis.py`) — Core sub-agents, coordinator, CLI, domain registry
-- **Security & API tests** (`test_security_and_api.py`) — PHI guard, audit trail, input validation, FastAPI endpoints
-- **Module tests** (`tests/test_hypertensive_crisis_agent.py`) — Workers, supervisor consensus, CLI integration
-- **Enrichment tests** (`tests/test_enrichment.py`) — Enrichment suite engines and threshold escalation
-
-Execute high-throughput simulation benchmark:
-
-```bash
-python simulator.py 1000
-```
-
----
-
-## 🐳 Container Deployment
+### Docker
 
 ```bash
 docker build -t hypertensive-crisis-agent .
-docker run -p 8000:8000 hypertensive-crisis-agent
+docker run --rm -p 127.0.0.1:8000:8000 -e AUDIT_SECRET_KEY="<strong-local-key>" hypertensive-crisis-agent
 ```
+
+For Compose, supply a strong `AUDIT_SECRET_KEY` in the host environment; never commit it.
+
+## Security and deployment
+
+The Python regex identifier filter is **not** guaranteed de-identification or HIPAA compliance. Its HMAC-SHA256 chain is in-memory and is not a durable clinical audit log. Do not process real patient identifiers or use output for clinical decisions.
+
+The browser requires only HTML/CSS/JavaScript, not Pyodide. CI runs Python and JavaScript tests and attempts to publish the static `web/` directory on `master` using GitHub Pages. A public link should be used only after successful Pages configuration and live verification. Supported browsers: modern Chrome, Firefox, Safari, and Edge (functional browser testing remains necessary).
+
+## License
+
+[MIT](LICENSE).
