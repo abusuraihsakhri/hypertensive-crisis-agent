@@ -3,8 +3,9 @@ FastAPI REST API Server for Hypertensive Crisis Agent.
 """
 from typing import Dict, Any, List
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from .base import AuditLogger, PHIGuard
+from .base import AuditLogger, PHIGuard, SecurityException
 from .models import SystemTaskPayload, ConsensusDossier
 from .supervisor import SystemSupervisor
 
@@ -21,9 +22,14 @@ class ChatRequest(BaseModel):
     query: str
 
 
+@app.exception_handler(SecurityException)
+def security_exception_handler(request, exc: SecurityException):
+    return JSONResponse(status_code=422, content={"detail": "Potential identifying information is not accepted."})
+
+
 @app.get("/health")
 def health():
-    return {"status": "HEALTHY", "service": "hypertensive-crisis-agent", "domain": "Cardiology & Intensive Care Systems", "standard": "AHA/ACC Guidelines / Surviving Sepsis Campaign", "version": "3.0.0-ENTERPRISE"}
+    return {"status": "HEALTHY", "service": "hypertensive-crisis-agent", "domain": "Cardiology & Intensive Care Systems", "standard": "Experimental generic audit; not a clinical guideline implementation", "version": "3.0.0-ENTERPRISE"}
 
 
 @app.get("/metrics")
@@ -31,7 +37,7 @@ def metrics():
     return {
         "dossiers_processed_total": len(supervisor.dossier_registry),
         "audit_blocks_total": len(AuditLogger.get_trail()),
-        "system_status": "NOMINAL_OPTIMAL"
+        "system_status": "RUNNING"
     }
 
 
@@ -47,7 +53,9 @@ def api_chat(req: ChatRequest):
         ans = supervisor.query_supervisory_chat(req.query)
         return {"response": ans}
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        if isinstance(e, SecurityException):
+            raise HTTPException(status_code=422, detail="Potential identifying information is not accepted.") from None
+        raise
 
 
 @app.get("/api/audit/logs")
