@@ -1,27 +1,33 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=70"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "hypertensive-crisis-engine"
-version = "2.0.0"
-description = "HypertensiveCrisis Sentinel: Emergency vs Urgency End-Organ Damage Arbiter"
+version = "2.0.1"
+description = "Experimental hypertensive crisis screening and legacy generic audit workflows"
 readme = "README.md"
-authors = [{ name = "Dr. Abu Suraih Sakhri", email = "abusuraih@example.com" }]
+authors = [{ name = "Dr. Abu Suraih Sakhri" }]
 license = { text = "MIT" }
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-    "Topic :: Scientific/Engineering :: Medical Science Apps.",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Topic :: Scientific/Engineering :: Medical Science Apps.",
 ]
-requires-python = ">=3.9"
-dependencies = []
+requires-python = ">=3.10"
+dependencies = ["pydantic>=2.0,<3"]
+
+[project.optional-dependencies]
+api = ["fastapi>=0.110,<1", "uvicorn>=0.30,<1"]
+test = ["pytest>=8,<10", "httpx>=0.27,<1", "fastapi>=0.110,<1"]
 
 [project.scripts]
 hypertensive-crisis-engine = "hypertensive_crisis_agent.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/abusuraihsakhri/hypertensive-crisis-engine"
-Repository = "https://github.com/abusuraihsakhri/hypertensive-crisis-engine.git"
+Homepage = "https://github.com/abusuraihsakhri/hypertensive-crisis-agent"
+Repository = "https://github.com/abusuraihsakhri/hypertensive-crisis-agent"
+
+[tool.setuptools.packages.find]
+include = ["agents*", "hypertensive_crisis_agent*"]

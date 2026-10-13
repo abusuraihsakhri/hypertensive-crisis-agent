@@ -1,7 +1,7 @@
 """
-Clinical Algorithmic Engine & Guideline Rules for HypertensiveCrisis Sentinel: Emergency vs Urgency End-Organ Damage Arbiter.
+Experimental Generic Metric Engine for HypertensiveCrisis Sentinel: Emergency vs Urgency End-Organ Damage Arbiter.
 Domain: Emergency Medicine
-Standard: ACC / AHA Hypertensive Crisis Guidelines
+Standard: Experimental generic-metric example (not a hypertension guideline)
 """
 import math
 from typing import Dict, Any, List, Optional
@@ -9,7 +9,7 @@ from .models import ClinicalCasePayload, AgentAlert, UrgencyLevel, ClinicalInteg
 
 
 class ClinicalDomainEngine:
-    GUIDELINE = "ACC / AHA Hypertensive Crisis Guidelines"
+    GUIDELINE = "Experimental generic-metric example (not a hypertension guideline)"
     PRIMARY_BASELINE_LIMIT = 20.0
     SECONDARY_ALERT_LIMIT = 10.0
 
@@ -18,7 +18,7 @@ class ClinicalDomainEngine:
         if value > cls.PRIMARY_BASELINE_LIMIT:
             return {
                 "title": "Primary Metric Threshold Exceeded",
-                "finding": f"Observed value ({value:.2f}) exceeds ACC / AHA Hypertensive Crisis Guidelines clinical baseline limit ({cls.PRIMARY_BASELINE_LIMIT:.1f}).",
+                "finding": f"Observed value ({value:.2f}) exceeds Experimental generic-metric example (not a hypertension guideline) clinical baseline limit ({cls.PRIMARY_BASELINE_LIMIT:.1f}).",
                 "recommendation": "Perform immediate secondary verification and calibration review.",
             }
         return None
@@ -40,6 +40,6 @@ class ClinicalDomainEngine:
             return {
                 "title": "Phenotypic / Biomarker Discordance Identified",
                 "finding": f"Status flag '{status_flag}' indicates divergence from standard diagnostic concordance.",
-                "recommendation": f"Order reflex confirmatory testing per ACC / AHA Hypertensive Crisis Guidelines clinical recommendations.",
+                "recommendation": f"Order reflex confirmatory testing per Experimental generic-metric example (not a hypertension guideline) clinical recommendations.",
             }
         return None

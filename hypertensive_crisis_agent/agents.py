@@ -93,7 +93,7 @@ class HTNCrisisCoordinator:
             "stat_critical_alerts": stat_count,
             "warning_alerts": warn_count,
             "alerts": [a.to_dict() for a in all_alerts],
-            "guideline_standard": "ACC / AHA Hypertensive Crisis Guidelines",
+            "guideline_standard": "Experimental generic-metric example (not a hypertension guideline)",
             "consensus_summary": f"Multi-agent supervision completed across 3 sub-agents with status [{status.value}].",
         }
 
@@ -105,6 +105,6 @@ class HTNCrisisCoordinator:
         if "status" in q or "summary" in q:
             return f"HypertensiveCrisis Sentinel: Emergency vs Urgency End-Organ Damage Arbiter currently tracking {len(self.case_registry)} cases in on-premises memory."
         elif "guideline" in q or "standard" in q:
-            return "Active clinical surveillance operates under ACC / AHA Hypertensive Crisis Guidelines validated protocols."
+            return "This package runs generic example thresholds; it is not clinically validated."
         else:
-            return f"HypertensiveCrisis Sentinel: Emergency vs Urgency End-Organ Damage Arbiter executive agent online. Zero-PHI air-gapped monitoring active."
+            return f"HypertensiveCrisis Sentinel: Emergency vs Urgency End-Organ Damage Arbiter executive agent online. Local example-only evaluation active; de-identification is not guaranteed."

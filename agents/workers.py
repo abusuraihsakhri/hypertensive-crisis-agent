@@ -1,7 +1,7 @@
 """
 Specialized Domain Worker Agents for Hypertensive Crisis Agent.
 Domain: Cardiology & Intensive Care Systems
-Standard: AHA/ACC Guidelines / Surviving Sepsis Campaign
+Standard: Unvalidated example thresholds (not medical decision support)
 """
 import uuid
 from typing import Dict, Any, List, Optional
@@ -20,7 +20,7 @@ class InvariantQCWorker:
                 origin_worker="InvariantQCWorker",
                 urgency=UrgencyLevel.ELEVATED,
                 summary="Primary Metric Threshold Exceeded",
-                technical_details=f"Primary measurement ({payload.primary_metric:.2f}) exceeds upper reference limit (25.00) under AHA/ACC Guidelines / Surviving Sepsis Campaign.",
+                technical_details=f"Primary measurement ({payload.primary_metric:.2f}) exceeds upper reference limit (25.00) in the experimental generic audit.",
                 actionable_remediation="Initiate recalibration workflow and review secondary parameters.",
             ))
         return alerts
@@ -57,7 +57,7 @@ class ProtocolConformanceWorker:
                 origin_worker="ProtocolConformanceWorker",
                 urgency=UrgencyLevel.ELEVATED,
                 summary="Protocol Conformance Discordance Detected",
-                technical_details=f"Descriptor '{payload.status_descriptor}' indicates discordance with AHA/ACC Guidelines / Surviving Sepsis Campaign standards.",
+                technical_details=f"Descriptor '{payload.status_descriptor}' indicates discordance with the example protocol descriptor.",
                 actionable_remediation="Re-evaluate input specimen or rerun secondary confirmation assay.",
             ))
         return alerts

@@ -1,236 +1,109 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hypertensive Crisis Engine — Operations Console</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #090d16;
-            --card: #111827;
-            --border: #1f293d;
-            --accent: #3b82f6;
-            --accent-glow: rgba(59, 130, 246, 0.25);
-            --text: #f3f4f6;
-            --text-muted: #9ca3af;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --success: #10b981;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            padding: 2rem;
-            min-height: 100vh;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        .header-title h1 { font-size: 1.6rem; font-weight: 700; color: #fff; }
-        .header-title p { color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem; }
-        .badge {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            background: var(--accent-glow);
-            color: var(--accent);
-            border: 1px solid var(--accent);
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1.2fr;
-            gap: 1.5rem;
-        }
-        .card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
-        .card h2 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .form-group { margin-bottom: 1rem; }
-        label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem; }
-        input, select, textarea {
-            width: 100%;
-            padding: 0.65rem 0.9rem;
-            background: #0d1322;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            color: #fff;
-            font-family: inherit;
-            font-size: 0.9rem;
-        }
-        input:focus, textarea:focus { outline: none; border-color: var(--accent); }
-        .btn {
-            background: var(--accent);
-            color: #fff;
-            border: none;
-            padding: 0.7rem 1.4rem;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            width: 100%;
-        }
-        .btn:hover { background: #2563eb; }
-        .terminal {
-            background: #060911;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            color: #10b981;
-            height: 380px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-        }
-        .metrics-bar {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        .metric-box {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1rem;
-            text-align: center;
-        }
-        .metric-val { font-size: 1.4rem; font-weight: 700; color: #fff; margin-top: 0.25rem; }
-        .metric-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Hypertensive Crisis — Educational Screening</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, Segoe UI, sans-serif; color: #e6edf5; background: #0b1220; line-height: 1.55; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    main, footer { max-width: 960px; margin: auto; padding: 1.5rem; }
+    header { border-bottom: 1px solid #334155; padding-bottom: 1.25rem; margin-bottom: 1.5rem; }
+    .eyebrow { color: #93c5fd; font-size: .85rem; letter-spacing: .05em; font-weight: 700; text-transform: uppercase; }
+    h1 { margin: .2rem 0 .45rem; line-height: 1.15; font-size: clamp(1.7rem, 4vw, 2.4rem); }
+    h2 { font-size: 1.2rem; margin: 0 0 .7rem; }
+    p { margin: .5rem 0 1rem; }
+    .muted { color: #b9c6d9; }
+    .notice { padding: 1rem 1.1rem; border-left: 4px solid #fbbf24; background: #26251c; border-radius: 6px; }
+    .grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 1.25rem; margin-top: 1.4rem; align-items: start; }
+    .panel { background: #152034; border: 1px solid #35455c; border-radius: 12px; padding: 1.3rem; }
+    .fields { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1rem; }
+    label, legend { color: #f0f4fb; font-weight: 600; display: block; margin-bottom: .4rem; }
+    input[type="number"], select { width: 100%; padding: .7rem; border-radius: 7px; border: 1px solid #70849d; background: #0c1729; color: #fff; font: inherit; }
+    input[type="radio"] { accent-color: #93c5fd; width: 1.1rem; height: 1.1rem; }
+    fieldset { border: 1px solid #70849d; border-radius: 8px; margin: 1rem 0; padding: .75rem; }
+    .choice { display: flex; gap: .55rem; align-items: flex-start; font-weight: 400; margin: .5rem 0; }
+    .help { font-size: .86rem; color: #b9c6d9; margin: .3rem 0; }
+    button { background: #60a5fa; color: #07152c; border: 0; border-radius: 7px; padding: .8rem 1rem; font-weight: 750; font-size: 1rem; width: 100%; cursor: pointer; }
+    button:hover { background: #93c5fd; }
+    :focus-visible { outline: 3px solid #fbbf24; outline-offset: 3px; }
+    #result { border-left: 5px solid #93c5fd; }
+    #result[data-state="emergency"] { border-left-color: #f87171; }
+    #result[data-state="special"], #result[data-state="severe"], #result[data-state="uncertain"] { border-left-color: #fbbf24; }
+    .action { font-weight: 650; }
+    ul { padding-left: 1.25rem; }
+    li { margin: .45rem 0; }
+    a { color: #93c5fd; text-underline-offset: 2px; }
+    footer { border-top: 1px solid #334155; color: #b9c6d9; font-size: .9rem; padding-top: 1rem; }
+    @media (max-width: 740px) { .grid, .fields { grid-template-columns: 1fr; } main, footer { padding: 1rem; } .panel { padding: 1rem; } }
+  </style>
+  <script src="./app.js" defer></script>
 </head>
 <body>
-
-    <div class="header">
-        <div class="header-title">
-            <h1>Hypertensive Crisis Engine</h1>
-            <p>Domain: Clinical & Cryptographic AI | Standard: CAP / CLSI / NIST Standards | LabMind-Atlas Architecture</p>
-        </div>
-        <div>
-            <span class="badge">Air-Gapped Active</span>
-            <span class="badge" style="background: rgba(16,185,129,0.2); color: #10b981; border-color: #10b981;">Zero-PHI Guard Active</span>
-        </div>
+  <main>
+    <header>
+      <div class="eyebrow">Clinical education / offline browser tool</div>
+      <h1>Severe blood pressure &amp; possible hypertensive emergency</h1>
+      <p class="muted">A transparent adult screening example based on the 2025 AHA/ACC guideline. No medication selection or BP-reduction targets are calculated.</p>
+    </header>
+    <div class="notice" role="note">
+      <strong>Not a diagnostic or treatment device.</strong> Blood pressure alone cannot diagnose or exclude acute target-organ injury. If there is chest pain, severe shortness of breath, new neurological deficit, confusion, seizure, or other concerning acute symptoms, seek emergency care irrespective of this tool's output.
     </div>
-
-    <div class="metrics-bar">
-        <div class="metric-box">
-            <div class="metric-label">System Status</div>
-            <div class="metric-val" style="color: var(--success);" id="m-status">OPTIMAL</div>
-        </div>
-        <div class="metric-box">
-            <div class="metric-label">Tasks Processed</div>
-            <div class="metric-val" id="m-tasks">142</div>
-        </div>
-        <div class="metric-box">
-            <div class="metric-label">Audit Blocks Signed</div>
-            <div class="metric-val" id="m-audit">142</div>
-        </div>
-        <div class="metric-box">
-            <div class="metric-label">PHI Interceptions</div>
-            <div class="metric-val" style="color: var(--accent);" id="m-phi">0</div>
-        </div>
-    </div>
-
     <div class="grid">
-        <div class="card">
-            <h2>⚙️ Dispatch Distributed Component Audit</h2>
-            <div class="form-group">
-                <label>Task / Sample ID</label>
-                <input type="text" id="task_id" value="TASK-2026-LIVE-01">
+      <section class="panel" aria-labelledby="input-title">
+        <h2 id="input-title">Enter measurements</h2>
+        <form id="bp-form">
+          <div class="fields">
+            <div>
+              <label for="systolic">Systolic BP (mm Hg)</label>
+              <input id="systolic" name="systolic" type="number" min="1" max="400" step="1" inputmode="numeric" placeholder="e.g. 185" required>
             </div>
-            <div class="form-group">
-                <label>Target Identifier</label>
-                <input type="text" id="target_id" value="SPECIMEN-ALPHA-77">
+            <div>
+              <label for="diastolic">Diastolic BP (mm Hg)</label>
+              <input id="diastolic" name="diastolic" type="number" min="1" max="300" step="1" inputmode="numeric" placeholder="e.g. 120" required>
             </div>
-            <div class="form-group">
-                <label>Primary Measurement / Value</label>
-                <input type="number" id="primary_metric" value="29.4" step="0.1">
-            </div>
-            <div class="form-group">
-                <label>Secondary Metric / Kinetic Index</label>
-                <input type="number" id="secondary_metric" value="14.8" step="0.1">
-            </div>
-            <div class="form-group">
-                <label>Status / Phenotype Descriptor</label>
-                <input type="text" id="status_descriptor" value="DISCORDANT_ANOMALY">
-            </div>
-            <div class="form-group">
-                <label><input type="checkbox" id="is_critical" checked> Trigger Emergency / Critical Flag</label>
-            </div>
-            <button class="btn" onclick="runAudit()">Execute Distributed Component Audit</button>
-        </div>
-
-        <div class="card">
-            <h2>📊 Real-Time Consensus Dossier & Audit Log</h2>
-            <div class="terminal" id="outputConsole">// Hypertensive Crisis Engine Operations Console Ready
-// Connection established with Air-Gapped Supervisor
-// Cryptographic HMAC-SHA256 audit ledger loaded.
-// Ready for live task payload dispatch...</div>
-        </div>
+          </div>
+          <fieldset>
+            <legend>Concerning acute symptoms or suspected target-organ injury?</legend>
+            <label class="choice"><input type="radio" name="symptoms" value="yes" required> Yes — e.g. chest pain, breathlessness, new neurologic symptoms, confusion</label>
+            <label class="choice"><input type="radio" name="symptoms" value="no"> No concerning symptoms reported</label>
+            <label class="choice"><input type="radio" name="symptoms" value="uncertain" checked> Unknown / not assessed</label>
+            <p class="help">A symptom report does not establish organ damage; absent symptoms do not exclude it.</p>
+          </fieldset>
+          <label for="pregnancy">Pregnant or recently postpartum?</label>
+          <select name="pregnancy" id="pregnancy" required>
+            <option value="" selected disabled>Choose an option</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+          <p class="help">Pregnancy, postpartum hypertensive disorders and stroke require separate condition-specific evaluation.</p>
+          <button type="submit">Review screening information</button>
+        </form>
+      </section>
+      <div>
+        <section class="panel" id="result" tabindex="-1" aria-live="polite" aria-atomic="true" hidden>
+          <h2 id="result-heading"></h2>
+          <p id="result-summary"></p>
+          <p class="action" id="result-action"></p>
+        </section>
+        <section class="panel" aria-labelledby="interpretation-title" style="margin-top:1.25rem">
+          <h2 id="interpretation-title">Interpretation limits</h2>
+          <ul>
+            <li><strong>Severe threshold:</strong> systolic &gt;180 <em>or</em> diastolic &gt;120 mm Hg (AHA/ACC 2025).</li>
+            <li><strong>Hypertensive emergency:</strong> severe elevation <em>with evidence of acute target-organ damage</em>, which requires clinical assessment.</li>
+            <li><strong>Without acute damage:</strong> aggressive short-term BP reduction is generally not indicated solely from the measurement.</li>
+            <li>Stroke, acute aortic syndromes and pregnancy have distinct clinical pathways.</li>
+          </ul>
+        </section>
+      </div>
     </div>
-
-    <script>
-        async function runAudit() {
-            const consoleEl = document.getElementById('outputConsole');
-            consoleEl.innerText = "// Dispatching task across specialized workers...
-// Invoking InvariantQCWorker, SafetyEscalationWorker, ProtocolWorker...";
-
-            const payload = {
-                task_id: document.getElementById('task_id').value,
-                target_identifier: document.getElementById('target_id').value,
-                primary_metric: parseFloat(document.getElementById('primary_metric').value),
-                secondary_metric: parseFloat(document.getElementById('secondary_metric').value),
-                status_descriptor: document.getElementById('status_descriptor').value,
-                is_critical_flag: document.getElementById('is_critical').checked
-            };
-
-            try {
-                const res = await fetch('/api/audit', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const data = await res.json();
-                consoleEl.innerText = JSON.stringify(data, null, 2);
-                document.getElementById('m-tasks').innerText = parseInt(document.getElementById('m-tasks').innerText) + 1;
-                document.getElementById('m-audit').innerText = parseInt(document.getElementById('m-audit').innerText) + 1;
-            } catch (err) {
-                consoleEl.innerText = "// Offline / Simulation Output:\n" + JSON.stringify({
-                    dossier_id: "DOSSIER-SIM-" + Math.floor(Math.random()*10000),
-                    system: "hypertensive-crisis-engine",
-                    domain: "Clinical & Cryptographic AI",
-                    task_id: payload.task_id,
-                    overall_urgency: payload.is_critical_flag ? "CRITICAL_STAT_PANIC" : "ELEVATED_RISK",
-                    integrity_status: "DISCORDANT_ANOMALY",
-                    alerts: [
-                        { worker: "InvariantQCWorker", alert: "Primary metric exceeds upper reference bound" },
-                        { worker: "SafetyEscalationWorker", alert: "Critical emergency interlock flag active" }
-                    ],
-                    audit_hash: "HMAC_SHA256_e83f9a72b941d6c381f9"
-                }, null, 2);
-            }
-        }
-    </script>
+    <section aria-labelledby="references-title" style="margin-top:1.5rem">
+      <h2 id="references-title">References</h2>
+      <p><a href="https://www.jacc.org/doi/10.1016/j.jacc.2025.05.007" target="_blank" rel="noopener noreferrer">2025 AHA/ACC high blood pressure guideline, §6.2</a>; <a href="https://professional.heart.org/en/science-news/management-of-elevated-blood-pressure-in-the-acute-care-setting" target="_blank" rel="noopener noreferrer">2024 AHA acute-care scientific statement</a>; <a href="https://academic.oup.com/eurheartj/article/45/38/3912/7741010" target="_blank" rel="noopener noreferrer">2024 ESC hypertension guideline</a>.</p>
+    </section>
+  </main>
+  <footer>All calculations run in this page; no measurements are stored or sent to a server. Do not enter identifying patient information. Educational prototype — not independently clinically validated.</footer>
 </body>
 </html>
