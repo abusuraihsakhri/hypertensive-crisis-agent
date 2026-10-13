@@ -11,6 +11,18 @@ from .agents import HTNCrisisCoordinator
 coordinator = HTNCrisisCoordinator()
 
 
+def parse_boolean(value):
+    """Parse CSV boolean cells without treating nonempty 'false' as True."""
+    if isinstance(value, bool):
+        return value
+    normalized = str(value).strip().lower()
+    if normalized in ("true", "1", "yes"):
+        return True
+    if normalized in ("false", "0", "no", ""):
+        return False
+    raise ValueError(f"Invalid boolean value: {value!r}")
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(prog="hypertensive-crisis-agent", description="HypertensiveCrisis Sentinel: Emergency vs Urgency End-Organ Damage Arbiter")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -82,7 +94,7 @@ def main(argv=None):
                 primary_metric=float(r.get("metric_primary", r.get("primary_metric", 15.0))),
                 secondary_metric=float(r.get("metric_secondary", r.get("secondary_metric", 5.0))),
                 status_flag=r.get("status_flag", r.get("status_text", "NORMAL")),
-                is_stat=bool(r.get("is_stat", r.get("critical_flag", False))),
+                is_stat=parse_boolean(r.get("is_stat", r.get("critical_flag", False))),
             )
             dossier = coordinator.process_case(case)
             row_dict = dict(r)
