@@ -33,8 +33,8 @@ class Severity(str, Enum):
 class DomainKnowledgeRegistry:
     """Enterprise domain rules, guideline matrices, and evidence benchmarks."""
     SYSTEM_VERSION = "2.0.0-PRO-CLINICAL"
-    ZERO_PHI_COMPLIANCE = True
-    HIPAA_SAFE_HARBOR = "ACTIVE_ON_PREMISES"
+    ZERO_PHI_COMPLIANCE = False
+    HIPAA_SAFE_HARBOR = "NOT_ASSESSED"
 
     @staticmethod
     def audit_security_and_integrity(payload: Dict[str, Any]) -> List[str]:
@@ -166,7 +166,7 @@ class HTNCrisisCoordinator:
         if "summary" in q or "status" in q:
             return f"HypertensiveCrisis Sentinel: Emergency vs Urgency End-Organ Damage Arbiter currently tracking {len(self.case_registry)} cases in local air-gapped memory."
         elif "guidelines" in q or "protocol" in q:
-            return "All sub-agents operate under validated consensus clinical algorithms and CAP/CLSI/NCCN/WHO standards."
+            return "These agents use experimental generic thresholds; no clinical guideline validation has been performed."
         else:
             return f"HypertensiveCrisis Sentinel: Emergency vs Urgency End-Organ Damage Arbiter executive agent online. Continuous supervisory monitoring active across all domain parameters."
 
